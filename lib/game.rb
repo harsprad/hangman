@@ -1,9 +1,14 @@
 class Game
-  def self.play
-    if File.exist? 'google-10000-english-no-swears.txt'
-      File.readlines('google-10000-english-no-swears.txt').each do |line|
-        p line.chomp
+
+  def init(word_list_file_name)
+    if File.exist? world_list_file_name
+      File.readlines(world_list_file_name).each do |line|
+        @world_list << line.chomp
       end
     end
+
+  def play
+    puts 'Hangman game started!'
+
   end
 end
