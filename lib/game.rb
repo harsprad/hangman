@@ -1,22 +1,23 @@
+require 'yaml'
+
 class Game
 
   def initialize(list_file)
-    @word_list = file_to_list(list_file)
+    make_secret(file_to_list(list_file))
     @guesses = []
     @correct_guesses = []
+    @lives = 10
   end
 
   def play
     puts 'Hangman game started!'
     puts 'You have 10 lives to guess all the letters of a hidden word.'
-
-    make_secret
+    puts 'Type save to save game state'
     
-    i = 10
-    until i==0
-      puts "\n#{i} lives left"
+    until @lives==0
+      puts "\n#{@lives} lives left"
       guess = get_guess
-      i -= 1 unless check_guess?(guess)
+      @lives -= 1 unless check_guess?(guess)
       show_correct_letters
       break if win?
     end
@@ -34,8 +35,8 @@ class Game
     list
   end
 
-  def make_secret
-    @secret = @word_list.filter do |word|
+  def make_secret(word_list)
+    @secret = word_list.filter do |word|
       word.length >= 5
     end.sample.downcase.split('')
     @display = @secret.map{ "_" }
@@ -46,6 +47,7 @@ class Game
     loop do
       puts 'Make a new single letter guess:'
       guess = gets.chomp.downcase
+      save_game_state if guess == 'save'
       break if guess.length == 1 && !@guesses.include?(guess)
     end
     @guesses << guess
@@ -72,4 +74,19 @@ class Game
     end
   end
 
+  def save_game_state
+    Dir.mkdir('saves') unless Dir.exist?('saves')
+
+    file_name = make_file_name('yaml')
+
+    File.open(file_name, 'w') do |file|
+      file.write YAML::dump(self)
+    end
+
+    puts "GAME SAVED!"
+  end
+
+  def make_file_name(extension)
+    "saves/#{@display.join('')}-#{Time.now.to_i.to_s}.#{extension}"
+  end
 end
