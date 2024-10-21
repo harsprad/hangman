@@ -10,8 +10,8 @@ class Game
   end
 
   def play
-    puts 'Hangman game started!'
-    puts 'You have 10 lives to guess all the letters of a hidden word.'
+    puts "\nHangman game started!"
+    puts "You have #{@lives} lives to guess all the letters."
     puts 'Type save to save game state'
     
     until @lives==0
@@ -39,7 +39,7 @@ class Game
     @secret = word_list.filter do |word|
       word.length >= 5
     end.sample.downcase.split('')
-    @display = @secret.map{ "_" }
+    @display = @secret.map{ '_' }
   end
 
   def get_guess
