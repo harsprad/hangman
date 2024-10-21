@@ -11,16 +11,17 @@ class Game
     puts 'You have 10 attempts to guess all the letters of a hidden word.\n'
 
     @secret = @word_list.sample.downcase.split('')
+    @display = @secret.map{ "_" }
 
-    guess = get_guess
-
-    if @secret.include?(guess)
-      @correct_guess << guess
+    (1..10).each do |i|
+      puts "\nTurn #{i}"
+      guess = get_guess
+      check_guess(guess)
+      show_correct_letters
+      break if win?
     end
-    # update dislay
-    # if correct win
-    # if no more guesses lose
-    # else loop
+    
+    puts "\nGame over, did you win? Winning word: #{@secret.join('')}"
   end
 
   def file_to_list(file)
@@ -47,6 +48,23 @@ class Game
     guess = ''
     unless @guesses.include?(guess)
       guess = ask_guess
+    end
+  end
+
+  def show_correct_letters
+    puts @display.join(' ')
+  end
+
+  def win?
+    @display.join('') == @secret.join('')
+  end
+
+  def check_guess(guess)
+    if @secret.include?(guess)
+      @correct_guesses << guess
+      @display = @secret.map do |letter|
+        @correct_guesses.include?(letter) ? letter : '_'
+      end
     end
   end
 
