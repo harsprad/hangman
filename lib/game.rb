@@ -34,21 +34,15 @@ class Game
     list
   end
 
-  def ask_guess
-    valid_guess = false
-    unless valid_guess
-      puts 'Make a new single letter guess:'
-      guess = gets.chomp.downcase
-      valid_guess = true if guess.length == 1
-    end
-    guess
-  end
-
   def get_guess
     guess = ''
-    unless @guesses.include?(guess)
-      guess = ask_guess
+    loop do
+      puts 'Make a new single letter guess:'
+      guess = gets.chomp.downcase
+      break if guess.length == 1 && !@guesses.include?(guess)
     end
+    @guesses << guess
+    guess
   end
 
   def show_correct_letters
