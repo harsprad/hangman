@@ -8,14 +8,15 @@ class Game
 
   def play
     puts 'Hangman game started!'
-    puts 'You have 10 attempts to guess all the letters of a hidden word.\n'
+    puts 'You have 10 lives to guess all the letters of a hidden word.'
 
     make_secret
     
-    (1..10).each do |i|
-      puts "\nTurn #{i}"
+    i = 10
+    until i==0
+      puts "\n#{i} lives left"
       guess = get_guess
-      check_guess(guess)
+      i -= 1 unless check_guess?(guess)
       show_correct_letters
       break if win?
     end
@@ -59,12 +60,15 @@ class Game
     @display.join('') == @secret.join('')
   end
 
-  def check_guess(guess)
+  def check_guess?(guess)
     if @secret.include?(guess)
       @correct_guesses << guess
       @display = @secret.map do |letter|
         @correct_guesses.include?(letter) ? letter : '_'
       end
+      true
+    else
+      false
     end
   end
 
