@@ -10,9 +10,8 @@ class Game
     puts 'Hangman game started!'
     puts 'You have 10 attempts to guess all the letters of a hidden word.\n'
 
-    @secret = @word_list.sample.downcase.split('')
-    @display = @secret.map{ "_" }
-
+    make_secret
+    
     (1..10).each do |i|
       puts "\nTurn #{i}"
       guess = get_guess
@@ -32,6 +31,13 @@ class Game
       end
     end
     list
+  end
+
+  def make_secret
+    @secret = @word_list.filter do |word|
+      word.length >= 5
+    end.sample.downcase.split('')
+    @display = @secret.map{ "_" }
   end
 
   def get_guess
