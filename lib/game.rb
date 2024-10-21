@@ -10,14 +10,17 @@ class Game
     puts 'Hangman game started!'
     puts 'You have 10 attempts to guess all the letters of a hidden word.\n'
 
-    @secret = @word_list.sample.downcase
+    @secret = @word_list.sample.downcase.split('')
 
     guess = get_guess
 
-      # update dislay
-      # if correct win
-      # if no more guesses lose
-      # else loop
+    if @secret.include?(guess)
+      @correct_guess << guess
+    end
+    # update dislay
+    # if correct win
+    # if no more guesses lose
+    # else loop
   end
 
   def file_to_list(file)
@@ -33,7 +36,7 @@ class Game
   def ask_guess
     valid_guess = false
     unless valid_guess
-      puts "Make a new single letter guess:"
+      puts 'Make a new single letter guess:'
       guess = gets.chomp.downcase
       valid_guess = true if guess.length == 1
     end
@@ -41,7 +44,7 @@ class Game
   end
 
   def get_guess
-    guess = ""
+    guess = ''
     unless @guesses.include?(guess)
       guess = ask_guess
     end
